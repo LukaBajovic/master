@@ -20,9 +20,7 @@ public class KernelScanner {
     private int kernelRows;
     private int kernelColumns;
 
-    public KernelScanner() {
-    }
-
+    
     
     
     public KernelScanner(BufferedImage pattern) {
