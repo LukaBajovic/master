@@ -43,7 +43,7 @@ public class KernelScanner {
      * @return two dimensional integer array
      */
     public int[][] generateKernel(BufferedImage image) {
-        int[][] kernel = new int[image.getHeight()][image.getWidth()];
+        int[][] pattern = new int[image.getHeight()][image.getWidth()];
         
         //loops through the pattern image
         for (int y = 0; y < image.getHeight(); y++) {
@@ -52,16 +52,16 @@ public class KernelScanner {
                 //sets the kernel value depending on the color component value 
                 Color pixel = new Color(image.getRGB(x, y));
                 if (pixel.getRed() > 150) {
-                    kernel[y][x] = 0;
+                    pattern[y][x] = 0;
                     
                 } else {
-                    kernel[y][x] = 1;
+                    pattern[y][x] = 1;
                     
                 }
             }
         }
         
-        return kernel;
+        return pattern;
     }
     
     /**

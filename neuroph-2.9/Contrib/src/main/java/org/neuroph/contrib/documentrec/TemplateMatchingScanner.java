@@ -24,6 +24,7 @@ public class TemplateMatchingScanner {
     private BufferedImage pattern;
     private String patternName;
     private int patternArea;
+    private static final int THRESHOLD = 20;
 
     public TemplateMatchingScanner(BufferedImage pattern) {
         this.pattern = pattern;
@@ -41,11 +42,11 @@ public class TemplateMatchingScanner {
      * that represent match positions. The threshold is set to 
      * a default value.
      * 
-     * @param image
-     * @return 
+     * @param image image to scan
+     * @return list of Point objects
      */
     public List<Point> scan(BufferedImage image) {
-       return scan(image, 20);
+       return scan(image, THRESHOLD);
     }
     
     /**
@@ -59,7 +60,6 @@ public class TemplateMatchingScanner {
     public List<Point> scan(BufferedImage image, double threshold) {
         List<Point> matchList = new ArrayList<>();
         
-        int minDifference = Integer.MAX_VALUE;
         
         // loops through the image that is being scanned
         for (int x = 0; x < image.getWidth() - pattern.getWidth(); x++) {
