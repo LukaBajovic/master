@@ -14,9 +14,7 @@ import java.util.List;
 
 /**
  * Kernel scanner determines if an image contains a pattern
- * by using a matrix that represents a pattern. It loops through
- * the image and multiplies each matrix value with the corresponding
- * image pixel value.
+ * by using a matrix that represents a pattern. 
  *
  * @author Luka
  */
@@ -47,11 +45,11 @@ public class KernelScanner {
     public int[][] generateKernel(BufferedImage image) {
         int[][] kernel = new int[image.getHeight()][image.getWidth()];
         
-        //loop through the pattern image
+        //loops through the pattern image
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 
-                //set the kernel value depending on the color component value 
+                //sets the kernel value depending on the color component value 
                 Color pixel = new Color(image.getRGB(x, y));
                 if (pixel.getRed() > 150) {
                     kernel[y][x] = 0;
@@ -74,13 +72,13 @@ public class KernelScanner {
      */
     public BufferedImage invertColors(BufferedImage image) {
         
-        //loop through the original image
+        //loops through the original image
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 
                 Color originalRGB = new Color(image.getRGB(x, y));
                 
-                //invert color
+                //inverts color
                 Color invertedRGB = new Color(
                         255 - originalRGB.getRed(),
                         255 - originalRGB.getGreen(), 
@@ -134,6 +132,16 @@ public class KernelScanner {
         return matchList;
     }
     
+    /**
+     * Scans an image for a pattern and returns a list of Point objects
+     * that represent match positions. The match is determined by multiplying
+     * kernel values with image pixel values. If the multiplication output
+     * is greater than the threshold, the position is considered a match
+     * and added to the list. The threshold is set to a default value.
+     * 
+     * @param image to scan
+     * @return list of Point objects
+     */
     public List<Point> scan(BufferedImage image) {
         return scan(image, patternArea * 100);
     }

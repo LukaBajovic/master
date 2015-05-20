@@ -50,7 +50,7 @@ public class TemplateMatchingScanner {
     
     /**
      * Scans an image for a pattern and returns a list of Point objects
-     * that represent match positions.  
+     * that represent match positions. 
      * 
      * @param image image to scan
      * @param threshold threshold for maximal difference between pixel RGB values
