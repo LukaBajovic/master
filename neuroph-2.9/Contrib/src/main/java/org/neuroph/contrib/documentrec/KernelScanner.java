@@ -20,10 +20,16 @@ import java.util.List;
  */
 public class KernelScanner {
     
-    
+    /**
+     * Two dimensional integer generated from the pattern image
+     */
     private int[][] kernel;
     private int kernelRows;
     private int kernelColumns;
+    
+    /**
+     * Represents the area of the pattern image
+     */
     private int patternArea;
     
     
@@ -45,7 +51,7 @@ public class KernelScanner {
     public int[][] generateKernel(BufferedImage image) {
         int[][] pattern = new int[image.getHeight()][image.getWidth()];
         
-        //loops through the pattern image
+        //loop through the pattern image
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 
@@ -53,7 +59,6 @@ public class KernelScanner {
                 Color pixel = new Color(image.getRGB(x, y));
                 if (pixel.getRed() > 150) {
                     pattern[y][x] = 0;
-                    
                 } else {
                     pattern[y][x] = 1;
                     
@@ -72,13 +77,13 @@ public class KernelScanner {
      */
     public BufferedImage invertColors(BufferedImage image) {
         
-        //loops through the original image
+        //loop through the original image
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 
                 Color originalRGB = new Color(image.getRGB(x, y));
                 
-                //inverts color
+                //invert color
                 Color invertedRGB = new Color(
                         255 - originalRGB.getRed(),
                         255 - originalRGB.getGreen(), 
@@ -100,30 +105,30 @@ public class KernelScanner {
      * @param threshold threshold for multiplication output
      * @return list of Point objects
      */
-    public List<Point> scan(BufferedImage image, int threshold) {
-        //inverts image colors
+    public List<Point> scan(BufferedImage image, double threshold) {
+        //invert image colors
         BufferedImage invertedImage = invertColors(image);
         List<Point> matchList = new ArrayList<>();
         
-        //loops through the image
+        //loop through the image
         for (int y = 0; y < invertedImage.getHeight() - kernelRows; y++) {
             for (int x = 0; x < invertedImage.getWidth() - kernelColumns; x++) {
 
-                //resets the sum
+                //reset the sum
                 int sum = 0;
                 
-                //loops through the kernel
+                //loop through the kernel
                 for (int i = 0; i < kernelRows; i++) {
                     for (int j = 0; j < kernelColumns; j++) {
                         
-                        //multiplies image pixel values with kernel values and adds them to the sum
+                        //multiply image pixel values with kernel values and add them to the sum
                         Color pixel = new Color(invertedImage.getRGB(x + j, y + i));
                         sum += (pixel.getRed() + pixel.getGreen() + pixel.getBlue()) * kernel[i][j];
                         
                     }
                 }
                 if (threshold < sum) {
-                    //adds a match to the list
+                    //add a match to the list
                     Point p = new Point(x, y);
                     matchList.add(p);
                 }
