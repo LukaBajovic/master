@@ -76,7 +76,7 @@ public class KernelScanner {
      * @return BufferedImage with inverted colors
      */
     public BufferedImage invertColors(BufferedImage image) {
-        
+        BufferedImage invertedImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
         //loop through the original image
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
@@ -88,10 +88,10 @@ public class KernelScanner {
                         255 - originalRGB.getRed(),
                         255 - originalRGB.getGreen(), 
                         255 - originalRGB.getBlue());
-                image.setRGB(x, y, invertedRGB.getRGB());
+                invertedImage.setRGB(x, y, invertedRGB.getRGB());
             }
         }
-        return image;
+        return invertedImage;
     }
     
     /**
@@ -106,6 +106,7 @@ public class KernelScanner {
      * @return list of Point objects
      */
     public List<Point> scan(BufferedImage image, double threshold) {
+        
         //invert image colors
         BufferedImage invertedImage = invertColors(image);
         List<Point> matchList = new ArrayList<>();

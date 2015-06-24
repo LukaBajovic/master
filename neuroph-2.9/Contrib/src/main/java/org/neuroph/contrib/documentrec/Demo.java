@@ -63,6 +63,11 @@ public class Demo {
         String linePatternFile = "resources/LinePattern.jpg";
 
         try {
+
+            JFrame templateMatchingFrame = new JFrame("Template Matching Scanner");
+
+            JFrame kernelFrame = new JFrame("Kernel Scanner");
+
             List<BufferedImage> patternImagesList = new ArrayList<>();
 
             //load the image file to scan
@@ -75,10 +80,10 @@ public class Demo {
             BufferedImage inputFieldRightPattern = ImageIO.read(new File(inputFieldRightPatternFile));
             patternImagesList.add(inputFieldRightPattern);
 
-            BufferedImage checkBoxPattern = ImageIO.read(new File(dateFieldPatternFile));
+            BufferedImage checkBoxPattern = ImageIO.read(new File(checkBoxPatternFile));
             patternImagesList.add(checkBoxPattern);
 
-            BufferedImage dateFieldPattern = ImageIO.read(new File(checkBoxPatternFile));
+            BufferedImage dateFieldPattern = ImageIO.read(new File(dateFieldPatternFile));
             patternImagesList.add(dateFieldPattern);
 
             for (BufferedImage pattern : patternImagesList) {
@@ -93,18 +98,21 @@ public class Demo {
 
                 //create a result list from a kernel scan
                 List<Point> kernelScanResults = kernelScanner.scan(imageToScan, 39000);
+                
+                //show template matching scan results
+                MatchViewPanel templateScannerView = new MatchViewPanel(imageToScan, templateMatchingResults);
+                templateMatchingFrame.add(templateScannerView);
+                templateMatchingFrame.setSize(imageToScan.getWidth(), imageToScan.getHeight());
+                templateMatchingFrame.setVisible(true);
+                
+                //show kernel scan results
+                MatchViewPanel kernelScannerView = new MatchViewPanel(imageToScan, kernelScanResults);
+                kernelFrame.add(kernelScannerView);
+                kernelFrame.setSize(imageToScan.getWidth(), imageToScan.getHeight());
+                kernelFrame.setVisible(true);
 
-                //print the results
-                for (Point p : templateMatchingResults) {
-                    System.out.println("Template matching scanner:");
-                    System.out.println("Match at: " + p);
-                }
-                for (Point p : kernelScanResults) {
-                    System.out.println("Kernel scanner:");
-                    System.out.println("Match at: " + p);
-                }
+
             }
-
 
             NeuralNetwork nnet = NeuralNetwork.createFromFile("resources/NeuralNetwork.nnet");
             ImageRecognitionPlugin imageRecognition = (ImageRecognitionPlugin) nnet.getPlugin(ImageRecognitionPlugin.class);
@@ -121,7 +129,6 @@ public class Demo {
 
                 }
             }
-
         } catch (IOException ex) {
             Logger.getLogger(Demo.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Images not loaded!");
