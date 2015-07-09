@@ -18,27 +18,25 @@ import java.util.List;
  *
  * @author Luka
  */
-public class KernelScanner {
+public class KernelScanner extends AbstractScanner {
     
     /**
-     * Two dimensional integer generated from the pattern image
+     * Two dimensional integer array generated from the pattern image
      */
     private int[][] kernel;
     private int kernelRows;
     private int kernelColumns;
     
-    /**
-     * Represents the area of the pattern image
-     */
-    private int patternArea;
     
     
     
     public KernelScanner(BufferedImage pattern) {
-        this.kernelRows = pattern.getHeight();
-        this.kernelColumns = pattern.getWidth();
-        this.kernel = generateKernel(pattern);
-        this.patternArea = pattern.getHeight()*pattern.getWidth();
+        super(pattern);
+        kernelRows = pattern.getHeight();
+        kernelColumns = pattern.getWidth();
+        kernel = generateKernel(pattern);
+        //The sum in the scan method varies by pattern size so the threshold is set proportional to the pattern size
+        threshold = pattern.getHeight()*pattern.getWidth()*100;
     }
     
     /**
@@ -149,7 +147,7 @@ public class KernelScanner {
      * @return list of Point objects
      */
     public List<Point> scan(BufferedImage image) {
-        return scan(image, patternArea * 100);
+        return scan(image, threshold);
     }
     
 }

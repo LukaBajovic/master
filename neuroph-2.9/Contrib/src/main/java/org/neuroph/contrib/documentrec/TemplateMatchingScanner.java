@@ -16,32 +16,26 @@ import java.util.List;
  * Template matching scanner determines if an image contains a pattern
  * by comparing pixel RGB values. Positions with minimal pixel difference
  * represent matches.
- *
+ *  
  * @author Luka
  */
-public class TemplateMatchingScanner {
-    
-    /**
-     * Represents an image of a pattern to search for 
-     */
-    private BufferedImage pattern;
+public class TemplateMatchingScanner extends AbstractScanner{
     
     /**
      * Represents the area of the pattern image
      */
     private int patternArea;
     
-    /**
-     * Represents the default threshold for pixel difference
-     */
-    private static final int THRESHOLD = 20;
+
     
 
     public TemplateMatchingScanner(BufferedImage pattern) {
-        this.pattern = pattern;
-        this.patternArea = pattern.getHeight()*pattern.getWidth();
+        super(pattern);
+        this.patternArea = pattern.getHeight() * pattern.getWidth();
     }
+    
 
+    
 
     
     /**
@@ -53,7 +47,7 @@ public class TemplateMatchingScanner {
      * @return list of Point objects
      */
     public List<Point> scan(BufferedImage image) {
-       return scan(image, THRESHOLD);
+       return scan(image, threshold);
     }
     
     /**
@@ -64,6 +58,7 @@ public class TemplateMatchingScanner {
      * @param threshold threshold for maximal difference between pixel RGB values
      * @return list of Point objects
      */
+    @Override
     public List<Point> scan(BufferedImage image, double threshold) {
         List<Point> matchList = new ArrayList<>();
         

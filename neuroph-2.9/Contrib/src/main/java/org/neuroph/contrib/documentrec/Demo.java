@@ -94,41 +94,49 @@ public class Demo {
                 KernelScanner kernelScanner = new KernelScanner(pattern);
 
                 //create a result list from a template matching scan
-                List<Point> templateMatchingResults = templateScanner.scan(imageToScan);
+                List<Point> templateMatchingResults = templateScanner.scan(imageToScan, 20);
 
                 //create a result list from a kernel scan
                 List<Point> kernelScanResults = kernelScanner.scan(imageToScan, 39000);
-                
+
                 //show template matching scan results
                 MatchViewPanel templateScannerView = new MatchViewPanel(imageToScan, templateMatchingResults);
                 templateMatchingFrame.add(templateScannerView);
                 templateMatchingFrame.setSize(imageToScan.getWidth(), imageToScan.getHeight());
                 templateMatchingFrame.setVisible(true);
-                
+
                 //show kernel scan results
                 MatchViewPanel kernelScannerView = new MatchViewPanel(imageToScan, kernelScanResults);
                 kernelFrame.add(kernelScannerView);
                 kernelFrame.setSize(imageToScan.getWidth(), imageToScan.getHeight());
                 kernelFrame.setVisible(true);
 
-
             }
 
             NeuralNetwork nnet = NeuralNetwork.createFromFile("resources/NeuralNetwork.nnet");
             ImageRecognitionPlugin imageRecognition = (ImageRecognitionPlugin) nnet.getPlugin(ImageRecognitionPlugin.class);
 
-            Point position = new Point();
+            List<Point> listPoint = new ArrayList<Point>();
             for (int y = 0; y < imageToScan.getHeight() - 31; y++) {
                 for (int x = 0; x < imageToScan.getWidth() - 31; x++) {
                     BufferedImage subimage = imageToScan.getSubimage(x, y, 31, 31);
                     HashMap<String, Double> output = imageRecognition.recognizeImage(subimage);
                     double match = output.get("InputFieldLeft");
                     if (match > 0.97) {
+                        Point p = new Point(x, y);
+                        listPoint.add(p);
                         System.out.println("x:" + x + " y:" + y);
                     }
 
                 }
             }
+
+            MatchViewPanel nnetPanel = new MatchViewPanel(imageToScan, listPoint);
+            JFrame frame = new JFrame("Neural Network Scanner");
+            frame.add(nnetPanel);
+            frame.setSize(imageToScan.getWidth(), imageToScan.getHeight());
+            frame.setVisible(true);
+
         } catch (IOException ex) {
             Logger.getLogger(Demo.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Images not loaded!");
